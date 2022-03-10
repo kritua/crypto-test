@@ -1,0 +1,39 @@
+.form {
+    width: 100%;
+    margin-top: 32px;
+    display: grid;
+    grid-gap: 32px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    padding: 32px;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px var(--color-shadow);
+    border-radius: 16px;
+
+    &__controls {
+        display: grid;
+        grid-gap: 32px;
+        margin: 32px -32px -32px;
+        padding: 24px;
+        grid-auto-flow: column;
+        grid-template-columns: max-content;
+        justify-content: flex-end;
+        border-top: 1px solid var(--color-form-border);
+    }
+
+    &__legend {
+        font-family: Montserrat, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+        color: var(--color-black);
+    }
+
+    &__form-content {
+        width: 100%;
+        display: grid;
+        grid-auto-flow: row;
+        grid-gap: 16px;
+    }
+}

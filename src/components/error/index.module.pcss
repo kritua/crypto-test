@@ -1,0 +1,30 @@
+.error {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    width: 100%;
+    font-family: Montserrat, sans-serif;
+    color: var(--color-red-error);
+    word-break: break-word;
+    min-width: 0;
+
+    &_icon {
+        display: flex;
+        align-items: flex-start;
+        line-height: 18px;
+    }
+
+    &__icon {
+        fill: var(--color-red-error);
+        min-width: 24px;
+
+        & > g {
+            fill: var(--color-white);
+        }
+    }
+
+    &__text {
+        padding: 3px 4px;
+        text-align: left;
+    }
+}

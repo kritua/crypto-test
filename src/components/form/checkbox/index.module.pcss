@@ -1,0 +1,99 @@
+.checkbox {
+    display: grid;
+    width: 100%;
+
+    &_row {
+        grid-auto-columns: auto 1fr;
+        grid-auto-flow: column;
+        grid-column-gap: 8px;
+    }
+
+    &_column {
+        grid-auto-flow: row;
+    }
+
+    &__label {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 40px;
+        display: block;
+        color: var(--color-black);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &_required {
+
+            &::after {
+                content: " *";
+            }
+        }
+    }
+
+    &__group {
+        display: grid;
+        grid-auto-flow: row;
+        grid-row-gap: 8px;
+        align-items: center;
+    }
+
+    &__error {
+        text-align: left;
+    }
+
+    &__input {
+        border: solid 1px var(--color-checkbox-input);
+        border-radius: 4px;
+        padding: 0;
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 200ms linear, box-shadow 200ms linear;
+        display: block;
+        cursor: pointer;
+        box-shadow: none;
+        -webkit-appearance: none;
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+
+        &:checked {
+            background-image: url("./img/icon.svg");
+            background-size: 14px 14px;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+            background-color: var(--color-checkbox-checked);
+            border-color: var(--color-checkbox-checked);
+
+            /* stylelint-disable-next-line selector-max-specificity, selector-max-pseudo-class */
+            &:hover:not([disabled]) {
+                background-color: var(--color-checkbox-checked-hover);
+                border-color: var(--color-checkbox-checked-hover);
+            }
+        }
+
+        &:focus:not(&_invalid):not([disabled]) {
+            border-color: var(--color-checkbox-checked);
+            box-shadow: 0 0 0 1px var(--color-checkbox-checked);
+        }
+
+        &:hover:not(&_invalid):not([disabled]) {
+            border-color: var(--color-checkbox-checked);
+        }
+
+        &[disabled] {
+            background-color: var(--color-checkbox-input);
+            border-color: var(--color-checkbox-input);
+            cursor: default;
+        }
+
+        &_error {
+            border-color: var(--color-red-error);
+            box-shadow: 0 0 0 1px var(--color-red-error);
+        }
+    }
+}

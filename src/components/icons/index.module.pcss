@@ -1,0 +1,32 @@
+.svg-icon {
+
+    &_loader {
+        width: 40px;
+        height: 40px;
+        animation: rotator 1.4s linear infinite;
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
+
+        & > circle {
+            fill: none;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 40;
+            stroke-width: 12;
+            stroke-linecap: square;
+            transform-origin: center;
+        }
+    }
+}
+
+@keyframes :local(rotator) {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

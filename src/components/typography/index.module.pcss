@@ -1,0 +1,71 @@
+.typography {
+    font-family: var(--font-family-primary, "SB Sans Text", sans-serif);
+    font-feature-settings: "tnum" on, "lnum" on;
+    color: var(--color-text-dark);
+
+    &_h1,
+    &_h2,
+    &_h3,
+    &_h4 {
+        margin: 0;
+        padding: 0;
+        font-weight: 600;
+    }
+
+    &_h1 {
+        font-size: 36px;
+        line-height: 44px;
+    }
+
+    &_h2 {
+        font-size: 28px;
+        line-height: 32px;
+    }
+
+    &_h3 {
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    &_h4,
+    &_text,
+    &_label,
+    &_label-medium,
+    &_text-medium,
+    &_text-semibold {
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    &_text,
+    &_label {
+        font-weight: 300;
+    }
+
+    &_text-small {
+        font-size: 14px;
+        line-height: 16px;
+    }
+
+    &_text-medium,
+    &_label-medium {
+        font-weight: 500;
+    }
+
+    &_text-semibold {
+        font-weight: 600;
+    }
+
+    &_caption {
+        font-size: 12px;
+        line-height: 15px;
+        color: var(--color-text-light);
+    }
+
+    &_line-clamp {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+}

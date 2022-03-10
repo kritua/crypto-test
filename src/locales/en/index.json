@@ -1,0 +1,13 @@
+{
+    "components": {
+        "header": {}
+    },
+    "routes": {},
+    "helmet": {
+        "title": {
+            "main": "Test App"
+        },
+        "description": "test app desc",
+        "keywords": "test app"
+    }
+}

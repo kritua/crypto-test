@@ -1,0 +1,23 @@
+{
+    "components": {
+        "header": {
+            "logo": "Test App",
+            "nav": {
+                "pairs": "Pairs",
+                "favorites": "Favorites"
+            }
+        }
+    },
+    "routes": {
+        "main": {
+            "hello": "Hello!"
+        }
+    },
+    "helmet": {
+        "title": {
+            "main": "Test App"
+        },
+        "description": "test app desc",
+        "keywords": "test app"
+    }
+}

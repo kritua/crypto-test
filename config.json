@@ -1,0 +1,6 @@
+{
+    "redux-logger": {
+        "duration": true,
+        "collapsed": true
+    }
+}

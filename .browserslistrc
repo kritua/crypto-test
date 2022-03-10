@@ -1,0 +1,7 @@
+defaults
+not IE 11
+not OperaMini all
+not Edge 18
+not Baidu 7
+not kaios 2
+not UCAndroid 12
