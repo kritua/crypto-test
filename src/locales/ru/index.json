@@ -3,14 +3,22 @@
         "header": {
             "logo": "Test App",
             "nav": {
-                "pairs": "Pairs",
+                "main": "Main",
                 "favorites": "Favorites"
             }
         }
     },
     "routes": {
         "main": {
-            "hello": "Hello!"
+            "hello": "Hello!",
+            "table": {
+                "head": {
+                    "pair": "Pair",
+                    "fee": "Fee",
+                    "address": "Address"
+                }
+            },
+            "empty": "No results"
         }
     },
     "helmet": {

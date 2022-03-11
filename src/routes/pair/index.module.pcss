@@ -1,0 +1,84 @@
+.pair {
+    padding: 20px;
+    width: 100%;
+    display: grid;
+    align-items: center;
+
+    &__list {
+        width: 100%;
+        max-width: 1200px;
+        margin-top: 24px;
+        gap: 16px;
+        justify-content: stretch;
+        box-sizing: border-box;
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        grid-template-columns: max-content max-content;
+    }
+
+    &__button {
+        min-width: 200px;
+    }
+
+    &__list-item {
+        padding: 16px;
+        box-sizing: border-box;
+        flex-basis: 25%;
+    }
+
+    &__icon-like {
+        fill: none;
+        stroke: var(--color-black);
+        stroke-width: 1px;
+        paint-order: stroke;
+        transition: fill, stroke 300ms ease;
+        width: 24px;
+        height: 24px;
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:hover:not(&_liked) {
+                stroke: var(--color-gray-80);
+                fill: var(--color-gray-80);
+            }
+        }
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+
+        &_liked {
+            fill: var(--color-red);
+            stroke: var(--color-red);
+        }
+    }
+
+    &__chevron {
+        fill: var(--color-red);
+        transition: transform 300ms ease;
+
+        @media screen and (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+
+        &_positive {
+            transform: rotate(180deg);
+            fill: var(--color-green);
+        }
+    }
+
+    &__change-text {
+
+        &_negative {
+            color: var(--color-red);
+        }
+
+        &_positive {
+            color: var(--color-green);
+        }
+    }
+}

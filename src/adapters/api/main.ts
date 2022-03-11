@@ -9,6 +9,22 @@ interface IMetaItem {
     fee: string
 }
 
+export interface IPostPairRequestResponse {
+    fee7d: string,
+    fee24h: string,
+    feeAllTime: string,
+    leftLocked: string,
+    leftPrice: string,
+    meta: IMetaItem,
+    rightLocked: string,
+    rightPrice: string,
+    tvl: string,
+    tvlChange: string,
+    volume7d: string,
+    volume24h: string,
+    volumeChange24h: string
+}
+
 export const main = createApi({
     reducerPath: 'api/main',
     tagTypes   : ['main'],
@@ -19,7 +35,7 @@ export const main = createApi({
         getPairs: build.query<Array<IMetaItem>, undefined>({
             providesTags     : ['main'],
             transformResponse: (resp: Array<IMetaItem>) => {
-                return resp.filter((item) => item.counter.includes('USDT'));
+                return resp.filter((item) => item.counter === 'USDT');
             },
             query: (params) => ({
                 url   : 'pairs/meta',
@@ -27,11 +43,11 @@ export const main = createApi({
                 params
             })
         }),
-        getCurrenciesById: build.query({
-            providesTags: ['main'],
-            query       : ({ id }: { id: string }) => ({
-                url   : `currencies/${id}`,
-                method: 'GET'
+        postCurrenciesById: build.mutation<IPostPairRequestResponse, { address: string }>({
+            invalidatesTags: ['main'],
+            query          : ({ address }: { address: string }) => ({
+                url   : `pairs/address/${address}`,
+                method: 'POST'
             })
         })
     })

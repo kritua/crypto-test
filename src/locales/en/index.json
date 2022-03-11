@@ -1,8 +1,43 @@
 {
     "components": {
-        "header": {}
+        "header": {
+            "logo": "Test App",
+            "nav": {
+                "main": "Main",
+                "favorites": "Favorites"
+            }
+        }
     },
-    "routes": {},
+    "routes": {
+        "main": {
+            "title_all-pairs": "All pairs",
+            "title_favorites": "Favorites",
+            "table": {
+                "head": {
+                    "pair": "Pair",
+                    "fee": "Fee",
+                    "address": "Address",
+                    "favorites": "Favorites"
+                }
+            },
+            "empty": "No results"
+        },
+        "pair": {
+            "title": "Pair {{meta}}",
+            "blocks": {
+                "tokens": "Tokens Locked",
+                "tvl": "TVL",
+                "24h-vol": "24h Trading Volume",
+                "24h-fees": "24h Fees"
+            },
+            "buttons": {
+                "trade": "Trade"
+            }
+        },
+        "favorites": {
+            "title": "Favorites pairs"
+        }
+    },
     "helmet": {
         "title": {
             "main": "Test App"

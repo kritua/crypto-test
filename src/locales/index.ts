@@ -20,9 +20,9 @@ i18n
     .use(initReactI18next)
     .init({
         debug        : __DEVELOPMENT__,
-        fallbackLng  : __DEVELOPMENT__ ? false : 'ru',
+        fallbackLng  : __DEVELOPMENT__ ? false : 'en',
         lowerCaseLng : true,
-        lng          : 'ru',
+        lng          : 'en',
         interpolation: { escapeValue: false },
         keySeparator : '.',
         whitelist    : ['ru', 'en'],

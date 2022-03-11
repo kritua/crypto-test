@@ -48,7 +48,10 @@
         "webpack-dev-server": "3.x.x"
     },
     "dependencies": {
+        "@emotion/react": "^11.8.2",
+        "@emotion/styled": "^11.8.1",
         "@hookform/error-message": "2.x.x",
+        "@mui/material": "^5.5.0",
         "@reduxjs/toolkit": "1.7.1",
         "classnames": "2.x.x",
         "history": "4.x.x",
