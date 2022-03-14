@@ -1,6 +1,6 @@
 
 export function useLocalStorage(key: string) {
-    const getStorage = () => {
+    const getStorage = <T extends unknown>(): Record<string, T> => {
         const item = localStorage.getItem(key);
 
         try {

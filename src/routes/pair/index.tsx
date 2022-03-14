@@ -73,10 +73,10 @@ export const Pair = () => {
     }, []);
 
     useEffect(() => {
-        const newTempStorage = Object.values(getStorage());
+        const newTempStorage = Object.values(getStorage<string>());
 
         if(newTempStorage.length) {
-            setTempStorage(getStorage());
+            setTempStorage(newTempStorage);
         }
     }, []);
 
@@ -191,7 +191,7 @@ export const Pair = () => {
     const onClickLike = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
 
-        const currentStorage = getStorage();
+        const currentStorage = Object.values(getStorage<string>());
         const newStorage = [...currentStorage];
 
         if(newStorage.includes(address)) {
