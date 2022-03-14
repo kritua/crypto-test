@@ -188,7 +188,7 @@ export const Main = () => {
                 onRowsPerPageChange={onClickChangeRowsPerPage}
             />
         );
-    }, [rowsPerPage, data?.length, page]);
+    }, [rowsPerPage, data?.length, page, match?.path]);
 
     return (
         <div className={cn('main')}>

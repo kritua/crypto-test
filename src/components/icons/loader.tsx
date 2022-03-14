@@ -23,9 +23,9 @@ export const IconLoader = (props: IProps) => {
         <SVG {...svgProps} viewBox="0 0 100 100">
             <circle fill="transparent" stroke={`url(#${uid})`} cx="50" cy="50" r="35" />
             <linearGradient id={uid}>
-                <stop offset="25%" stopColor="#dadada" stopOpacity="1" />
-                <stop offset="50%" stopColor="#dadada" stopOpacity=".5" />
-                <stop offset="100%" stopColor="#dadada" stopOpacity="0" />
+                <stop offset="25%" stopColor="#eeeeee" stopOpacity="1" />
+                <stop offset="50%" stopColor="#eeeeee" stopOpacity=".5" />
+                <stop offset="100%" stopColor="#eeeeee" stopOpacity="0" />
             </linearGradient>
         </SVG>
     );

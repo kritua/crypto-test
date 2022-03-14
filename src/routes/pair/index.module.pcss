@@ -81,4 +81,49 @@
             color: var(--color-green);
         }
     }
+
+    &__modal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__modal-content {
+        width: 600px;
+        padding: 24px;
+    }
+
+    &__modal-container {
+        display: grid;
+        width: 100%;
+        margin-top: 24px;
+        grid-row-gap: 16px;
+    }
+
+    &__modal-inputs {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 16px;
+        align-items: flex-start;
+    }
+
+    &__loader {
+        height: 24px;
+        width: 24px;
+    }
+
+    &__success {
+        margin: 24px 0;
+        display: grid;
+        justify-content: center;
+        grid-gap: 16px;
+        text-align: center;
+    }
+
+    &__success-icon {
+        width: 100px;
+        height: 100px;
+        fill: var(--color-green);
+        justify-self: center;
+    }
 }

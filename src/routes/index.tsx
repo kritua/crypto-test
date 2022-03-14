@@ -18,7 +18,6 @@ export const Routes = () => {
                 {
                     layout   : Layout,
                     component: Component,
-                    isPublic,
                     ...props
                 },
                 index

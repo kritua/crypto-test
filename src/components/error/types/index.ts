@@ -5,7 +5,6 @@ export interface IProps {
     children?: ReactNode,
     className?: string | IStyle,
     elIcon?: boolean,
-    'data-qa'?: string,
     mountDelay?: number,
     refEl?: RefObject<HTMLDivElement> | null
 }

@@ -7,7 +7,7 @@ import IconError from 'component/icons/error';
 import { IProps } from './types';
 import style from './index.module.pcss';
 
-const Error: React.FC<IProps> = (props) => {
+const Error = (props: IProps) => {
     const cn = useClassnames(style, props.className, true);
     const [isDelay, setIsDelay] = useState(!!props.mountDelay);
 

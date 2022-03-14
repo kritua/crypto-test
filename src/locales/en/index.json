@@ -32,6 +32,27 @@
             },
             "buttons": {
                 "trade": "Trade"
+            },
+            "modal": {
+                "title": "Swap tokens",
+                "form": {
+                    "from": {
+                        "label": "From",
+                        "token": "Token"
+                    },
+                    "to": {
+                        "label": "To",
+                        "token": "Token"
+                    },
+                    "buttons": {
+                        "submit": "Submit",
+                        "cancel": "Cancel"
+                    },
+                    "error": "Not a number"
+                },
+                "success": {
+                    "title": "Success"
+                }
             }
         },
         "favorites": {

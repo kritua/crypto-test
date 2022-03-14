@@ -394,7 +394,7 @@
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-misused-promises": ["error", {
             "checksConditionals": false,
-            "checksVoidReturn": true
+            "checksVoidReturn": false
         }],
         "@typescript-eslint/no-namespace": "error",
         "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
@@ -412,13 +412,14 @@
         "@typescript-eslint/no-unsafe-member-access": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-untyped-public-signature": "off",
-        "@typescript-eslint/no-unused-vars-experimental": ["error", {
-            "ignoreArgsIfArgsAfterAreUsed": true
+        "@typescript-eslint/no-unused-vars": ["error", {
+            "vars": "all",
+            "args": "after-used",
+            "ignoreRestSiblings": false
         }],
         "@typescript-eslint/no-unused-expressions": ["error", {
             "allowShortCircuit": true
         }],
-        "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-use-before-define": "error",
         "@typescript-eslint/no-useless-constructor": "error",
         "@typescript-eslint/no-var-requires": "error",

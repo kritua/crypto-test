@@ -1,17 +1,32 @@
-import React, { Fragment, useEffect, useState, useMemo, MouseEvent } from 'react';
+import React, { Fragment, useEffect, useState, useMemo, MouseEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Typography, Skeleton, Paper, Container, Button, Stack } from '@mui/material';
+import { useForm, FormProvider } from 'react-hook-form';
+import { Typography, Skeleton, Paper, Container, Button, Stack, Modal } from '@mui/material';
 
 import useClassnames from 'hook/use-classnames';
 import { useLocalStorage } from 'hook/use-localstorage';
 
 import IconLike from 'component/icons/like';
 import IconChevronDown from 'component/icons/chevron-down';
+import IconArrowDown from 'component/icons/arrow-down';
+import IconSuccessInCircle from 'component/icons/success-in-circle';
+import Input from 'component/form/input';
+import Loader from 'component/loader';
+import ErrorComponent from 'component/error';
 
 import { IPostPairRequestResponse, main } from 'adapter/api/main';
 
 import style from './index.module.pcss';
+
+interface IForm {
+    from?: string,
+    to?: string,
+    fromToken?: string,
+    toToken?: string
+}
+
+const SUCCESS_TIMER = 5;
 
 export const Pair = () => {
     const cn = useClassnames(style);
@@ -19,10 +34,43 @@ export const Pair = () => {
     const { address } = useParams<{ address: string }>();
     const { getStorage, setStorage } = useLocalStorage('pairs');
 
+    const context = useForm<IForm>();
+    const { formState: { isValid, dirtyFields, errors }, reset, setValue, clearErrors, handleSubmit, setError } = context;
+    const values = context.watch();
+
     const [post, { isLoading }] = main.usePostCurrenciesByIdMutation();
 
     const [data, setData] = useState<IPostPairRequestResponse>();
     const [tempStorage, setTempStorage] = useState<Array<string>>([]);
+    const [showTradeModal, setShowTradeModal] = useState<boolean>(false);
+    const [isLoadingSubmit, setIsLoadingSubmit] = useState<boolean>(false);
+    const [requestError, setRequestError] = useState<string>();
+    const [timer, setTimer] = useState<number>(SUCCESS_TIMER);
+    const [success, setSuccess] = useState<boolean>(false);
+
+    const successTimer = useRef<null | number>();
+
+    const onClearInterval = (): void => {
+        if(successTimer.current) {
+            clearInterval(successTimer.current);
+            successTimer.current = null;
+            setSuccess(false);
+            setTimer(SUCCESS_TIMER);
+        }
+    };
+
+    useEffect(() => {
+        if(timer === 0) {
+            onClearInterval();
+        }
+    }, [timer]);
+
+
+    useEffect(() => {
+        return () => {
+            onClearInterval();
+        };
+    }, []);
 
     useEffect(() => {
         setTempStorage(getStorage());
@@ -34,10 +82,107 @@ export const Pair = () => {
         })
             .unwrap()
             .then((resp) => {
-                setData(resp);
+                if(resp) {
+                    setData(resp);
+                    setValue('fromToken', resp.meta.base);
+                    setValue('toToken', resp.meta.counter);
+                }
             })
             .catch(console.error);
     }, []);
+
+    const isNumber = (value: string) => {
+        return /^\d+$/.test(value);
+    };
+
+    const onResetFieldsValidation = () => {
+        reset({}, {
+            keepValues     : true,
+            keepDirty      : false,
+            keepTouched    : true,
+            keepErrors     : true,
+            keepIsSubmitted: false,
+            keepSubmitCount: false,
+            keepIsValid    : false
+        });
+    };
+
+    useEffect(() => {
+        if(data) {
+            if(dirtyFields.from) {
+                const valuesFrom = values.from ?? '0';
+                const newToValue = (parseFloat(data.leftPrice) * parseFloat(valuesFrom)) / parseFloat(data.rightPrice);
+
+                if(values.from && !isNumber(values.from)) {
+                    setError('from', {
+                        type   : 'manual',
+                        message: t('routes.pair.modal.form.error')
+                    });
+                } else {
+                    setValue('to', newToValue ? String(newToValue) : undefined);
+                    clearErrors('from');
+                }
+            } else if(dirtyFields.to) {
+                const valuesTo = values.to ?? '0';
+                const newFromValue = (parseFloat(data.rightPrice) * parseFloat(valuesTo)) / parseFloat(data.leftPrice);
+
+                if(values.to && !isNumber(values.to)) {
+                    setError('to', {
+                        type   : 'manual',
+                        message: t('routes.pair.modal.form.error')
+                    });
+                } else {
+                    setValue('from', newFromValue ? String(newFromValue) : undefined);
+                    clearErrors('to');
+                }
+            }
+
+            onResetFieldsValidation();
+        }
+    }, [JSON.stringify(values)]);
+
+    const onSubmit = handleSubmit((formData) => {
+        setIsLoadingSubmit(true);
+        setRequestError(undefined);
+
+        const randomGenerator = Math.floor(Math.random() * 100) + 1;
+        const ticTacToe = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if(randomGenerator <= 50) {
+                    resolve(true);
+                } else {
+                    reject(new Error('Rejected with no reason'));
+                }
+            }, 5000);
+        });
+
+        ticTacToe
+            .then((resp) => {
+                if(resp) {
+                    setSuccess(true);
+                    successTimer.current = window.setInterval(() => {
+                        setTimer((state) => state - 1);
+                    }, 1000);
+                }
+            })
+            .catch((error) => {
+                setRequestError(error.message);
+                console.error(error);
+            })
+            .finally(() => {
+                setIsLoadingSubmit(false);
+            });
+        console.info('formData', formData, randomGenerator);
+    });
+
+    const onClickTrade = () => {
+        setShowTradeModal(true);
+    };
+
+    const onCloseTradeModal = () => {
+        setShowTradeModal(false);
+        reset();
+    };
 
     const onClickLike = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
@@ -90,13 +235,13 @@ export const Pair = () => {
                     <Typography sx={{ fontSize: 14, marginBottom: 1 }} color="text.secondary">
                         {t('routes.pair.blocks.tokens')}
                     </Typography>
-                    <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+                    <Stack direction="row" sx={{ justifyContent: 'space-between', gap: 1, alignItems: 'center' }}>
                         <Typography>{data.meta.base}</Typography>
-                        <Typography>{formatNumbersWithSpaces(data.leftLocked)}</Typography>
+                        <Typography sx={{ textAlign: 'right', fontSize: 12 }}>{formatNumbersWithSpaces(data.leftLocked)}</Typography>
                     </Stack>
-                    <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
+                    <Stack direction="row" sx={{ justifyContent: 'space-between', gap: 1, alignItems: 'center' }}>
                         <Typography>{data.meta.counter}</Typography>
-                        <Typography>{formatNumbersWithSpaces(data.rightLocked)}</Typography>
+                        <Typography sx={{ textAlign: 'right', fontSize: 12 }}>{formatNumbersWithSpaces(data.rightLocked)}</Typography>
                     </Stack>
                 </Fragment>
             );
@@ -142,6 +287,7 @@ export const Pair = () => {
                     size="large"
                     variant="contained"
                     classes={{ root: cn('pair__button') }}
+                    onClick={onClickTrade}
                 >
                     {t('routes.pair.buttons.trade')}
                 </Button>
@@ -193,7 +339,7 @@ export const Pair = () => {
                     <Typography sx={{ fontSize: 14, marginBottom: 1 }} color="text.secondary">
                         {t('routes.pair.blocks.tvl')}
                     </Typography>
-                    <Typography>
+                    <Typography sx={{ fontSize: 24 }}>
                         {`$${formatNumbersWithSpaces(parseInt(data.tvl, 10).toFixed(0))}`}
                     </Typography>
                     {elChevronIconText(data.tvlChange)}
@@ -223,7 +369,7 @@ export const Pair = () => {
                     <Typography sx={{ fontSize: 14, marginBottom: 1 }} color="text.secondary">
                         {t('routes.pair.blocks.24h-vol')}
                     </Typography>
-                    <Typography>
+                    <Typography sx={{ fontSize: 24 }}>
                         {`$${formatNumbersWithSpaces(parseInt(data.volume24h, 10).toFixed(0))}`}
                     </Typography>
                     {elChevronIconText(data.volumeChange24h)}
@@ -253,7 +399,7 @@ export const Pair = () => {
                     <Typography sx={{ fontSize: 14, marginBottom: 1 }} color="text.secondary">
                         {t('routes.pair.blocks.24h-fees')}
                     </Typography>
-                    <Typography>
+                    <Typography sx={{ fontSize: 24 }}>
                         {`$${formatNumbersWithSpaces(parseInt(data.fee24h, 10).toFixed(0))}`}
                     </Typography>
                 </Fragment>
@@ -266,6 +412,109 @@ export const Pair = () => {
             </Paper>
         );
     }, [isLoading, JSON.stringify(data)]);
+
+    const elError = useMemo(() => {
+        if(requestError) {
+            return <ErrorComponent elIcon={true}>{requestError}</ErrorComponent>;
+        }
+    }, [requestError]);
+
+    const elModalContent = () => {
+        if(success) {
+            return (
+                <div className={cn('pair__success')}>
+                    <Typography variant="h5">{t('routes.pair.modal.success.title')}</Typography>
+                    <IconSuccessInCircle svg={{ className: cn('pair__success-icon') }} />
+                </div>
+            );
+        }
+
+        return (
+            <FormProvider {...context}>
+                <form
+                    className={cn('pair__modal-container')}
+                    onSubmit={onSubmit}
+                >
+                    <div className={cn('pair__modal-inputs')}>
+                        <Input
+                            disabled={isLoadingSubmit}
+                            required={true}
+                            className={cn('pair__modal-input')}
+                            name="from"
+                            type="text"
+                            label={t('routes.pair.modal.form.from.label')}
+                        />
+                        <Input
+                            type="text"
+                            name="fromToken"
+                            label={t('routes.pair.modal.form.from.token')}
+                            disabled={true}
+                        />
+                    </div>
+                    <IconArrowDown />
+                    <div className={cn('pair__modal-inputs')}>
+                        <Input
+                            disabled={isLoadingSubmit}
+                            name="to"
+                            type="text"
+                            label={t('routes.pair.modal.form.to.label')}
+                        />
+                        <Input
+                            name="toToken"
+                            type="text"
+                            label={t('routes.pair.modal.form.to.token')}
+                            disabled={true}
+                        />
+                    </div>
+                    {elError}
+                    <Stack
+                        direction="row"
+                        sx={{ justifyContent: 'flex-end', gap: 1, alignItems: 'center', marginTop: 5 }}
+                    >
+                        <Button
+                            color="primary"
+                            size="large"
+                            variant="contained"
+                            type="submit"
+                            disabled={!isValid || !!errors.from || !!errors.to || isLoadingSubmit}
+                            sx={{ fontSize: '16px', lineHeight: '24px', minWidth: '110px' }}
+                        >
+                            {isLoadingSubmit ? <Loader className={cn('pair__loader')} /> : t('routes.pair.modal.form.buttons.submit')}
+                        </Button>
+                        <Button
+                            disabled={isLoadingSubmit}
+                            color="primary"
+                            size="large"
+                            variant="outlined"
+                            onClick={onCloseTradeModal}
+                            sx={{ fontSize: '16px', lineHeight: '24px', minWidth: '110px' }}
+                        >
+                            {t('routes.pair.modal.form.buttons.cancel')}
+                        </Button>
+                    </Stack>
+                </form>
+            </FormProvider>
+        );
+    };
+
+    const elTradeModal = () => {
+        return (
+            <Modal
+                open={showTradeModal}
+                onClose={onCloseTradeModal}
+                classes={{ root: cn('pair__modal') }}
+            >
+                <Paper classes={{ root: cn('pair__modal-content') }}>
+                    <Typography variant="h5">
+                        {t('routes.pair.modal.title')}
+                    </Typography>
+                    <Container disableGutters={true}>
+                        {elModalContent()}
+                    </Container>
+                </Paper>
+            </Modal>
+        );
+    };
 
     return (
         <div className={cn('pair')}>
@@ -291,6 +540,7 @@ export const Pair = () => {
                     {elFeesInfo}
                 </Container>
             </Container>
+            {elTradeModal()}
         </div>
     );
 };
