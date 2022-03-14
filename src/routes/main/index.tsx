@@ -40,7 +40,11 @@ export const Main = () => {
     const [tempStorage, setTempStorage] = useState<Array<string>>([]);
 
     useEffect(() => {
-        setTempStorage(getStorage());
+        const newTempStorage = Object.values(getStorage());
+
+        if(newTempStorage.length) {
+            setTempStorage(getStorage());
+        }
     }, []);
 
     const onClickChangeRowsPerPage = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
